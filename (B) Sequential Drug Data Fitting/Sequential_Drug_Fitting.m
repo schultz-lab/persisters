@@ -2,7 +2,7 @@
 % This code assumes the data for the first drug applied is in the first
 % columns of mean and stddev data in the "{whatever}_Data.txt" file.
 
-% Comment in either lines 18, 22, and 1121 or lines 21 and 29 to run
+% Comment in either lines 18, 22, and 1151 or lines 21 and 29 to run
 % the fits for all datasets or just one dataset, respectively.
 
 % This code was written to accomodate only 1 second drug, so datasets with
@@ -10,15 +10,15 @@
 % pairs of two datasets. The drug in parentheses in the experiment nickname
 % is the drug NOT included in that split dataset.
 
-% Lines 1048-1083 have save() statements that can be commented in and 
+% Lines 1078-1113 have save() statements that can be commented in and 
 % renamed as needed to save the final plotted results. These saved results
 % are used to make the "Combined" images with both second drugs (antibiotic
 % and PBS) in the  "Combined_..." folders.
 
-for experiment_index = 1:9
+for experiment_index = 1:12
 
 %% Clear
-%clear;
+% clear;
 clearvars -except experiment_index
 clc;
 close all; % figures
@@ -29,55 +29,67 @@ close all; % figures
 % experiment_index = 5; % Choose an integer
                                                          % Experiment
                                                          % Indices
-datafile_list = ["Seqdrug_AmpKan_081725_Data.txt";       % 1 = AmpKan
-                 "Seqdrug_KanAmp(PBS)_100525_Data.txt";  % 2 = KanAmp(PBS)
-                 "Seqdrug_Kan(Amp)PBS_100525_Data.txt";  % 3 = Kan(Amp)PBS
-                 "Seqdrug_AmpCip_122325_Data.txt";       % 4 = AmpCip
-                 "Seqdrug_CipAmp(PBS)_122225_Data.txt";  % 5 = CipAmp(PBS)
-                 "Seqdrug_Cip(Amp)PBS_122225_Data.txt";  % 6 = Cip(Amp)PBS
-                 "Seqdrug_CipKan_122225_Data.txt";       % 7 = CipKan
-                 "Seqdrug_KanCip(PBS)_121625_Data.txt";  % 8 = KanCip(PBS)
-                 "Seqdrug_Kan(Cip)PBS_121625_Data.txt"]; % 9 = Kan(Cip)PBS
+datafile_list = ["Seqdrug_AmpKan_081725_Data.txt";       %  1 = AmpKan
+                 "Seqdrug_KanAmp(PBS)_100525_Data.txt";  %  2 = KanAmp(PBS)
+                 "Seqdrug_Kan(Amp)PBS_100525_Data.txt";  %  3 = Kan(Amp)PBS
+                 "Seqdrug_AmpCip_122325_Data.txt";       %  4 = AmpCip
+                 "Seqdrug_CipAmp(PBS)_122225_Data.txt";  %  5 = CipAmp(PBS)
+                 "Seqdrug_Cip(Amp)PBS_122225_Data.txt";  %  6 = Cip(Amp)PBS
+                 "Seqdrug_CipKan_122225_Data.txt";       %  7 = CipKan
+                 "Seqdrug_KanCip(PBS)_121625_Data.txt";  %  8 = KanCip(PBS)
+                 "Seqdrug_Kan(Cip)PBS_121625_Data.txt";  %  9 = Kan(Cip)PBS
+                 "Seqdrug_AmpCip1000x_110725_Data.txt";  % 10 = AmpCip1000x
+                 "Seqdrug_CipAmp1000x_120525_Data.txt";  % 11 = CipAmp1000x
+                 "Seqdrug_CipKan1000x_120525_Data.txt"]; % 12 = CipKan1000x
 datafile = datafile_list(experiment_index);
 
 
-experiment_nickname_list = ["AmpKan";       % 1 = AmpKan
-                            "KanAmp(PBS)";  % 2 = KanAmp(PBS)
-                            "Kan(Amp)PBS";  % 3 = Kan(Amp)PBS
-                            "AmpCip";       % 4 = AmpCip
-                            "CipAmp(PBS)";  % 5 = CipAmp(PBS)
-                            "Cip(Amp)PBS";  % 6 = Cip(Amp)PBS
-                            "CipKan";       % 7 = CipKan
-                            "KanCip(PBS)";  % 8 = KanCip(PBS)
-                            "Kan(Cip)PBS"]; % 9 = Kan(Cip)PBS     
+experiment_nickname_list = ["AmpKan";       %  1 = AmpKan
+                            "KanAmp(PBS)";  %  2 = KanAmp(PBS)
+                            "Kan(Amp)PBS";  %  3 = Kan(Amp)PBS
+                            "AmpCip";       %  4 = AmpCip
+                            "CipAmp(PBS)";  %  5 = CipAmp(PBS)
+                            "Cip(Amp)PBS";  %  6 = Cip(Amp)PBS
+                            "CipKan";       %  7 = CipKan
+                            "KanCip(PBS)";  %  8 = KanCip(PBS)
+                            "Kan(Cip)PBS";  %  9 = Kan(Cip)PBS
+                            "AmpCip1000x";  % 10 = AmpCip1000x
+                            "CipAmp1000x";  % 11 = CipAmp1000x
+                            "CipKan1000x"]; % 12 = CipKan1000x
 experiment_nickname = experiment_nickname_list(experiment_index);
 
 
 %% Load information about the selected dataset
 
 % Which antibiotics were used in what order
-drugs_list = ["Amp", "Kan";  % 1 = AmpKan
-              "Kan", "Amp";  % 2 = KanAmp(PBS)
-              "Kan", "PBS";  % 3 = Kan(Amp)PBS
-              "Amp", "Cip";  % 4 = AmpCip
-              "Cip", "Amp";  % 5 = CipAmp(PBS)
-              "Cip", "PBS";  % 6 = Cip(Amp)PBS
-              "Cip", "Kan";  % 7 = CipKan
-              "Kan", "Cip";  % 8 = KanCip(PBS)
-              "Kan", "PBS"]; % 9 = Kan(Cip)PBS  
+drugs_list = ["Amp", "Kan";  %  1 = AmpKan
+              "Kan", "Amp";  %  2 = KanAmp(PBS)
+              "Kan", "PBS";  %  3 = Kan(Amp)PBS
+              "Amp", "Cip";  %  4 = AmpCip
+              "Cip", "Amp";  %  5 = CipAmp(PBS)
+              "Cip", "PBS";  %  6 = Cip(Amp)PBS
+              "Cip", "Kan";  %  7 = CipKan
+              "Kan", "Cip";  %  8 = KanCip(PBS)
+              "Kan", "PBS";  %  9 = Kan(Cip)PBS  
+              "Amp", "Cip";  % 10 = AmpCip1000x
+              "Cip", "Amp";  % 11 = CipAmp1000x
+              "Cip", "Kan"]; % 12 = CipKan1000x
 drugs = drugs_list(experiment_index,:);
 
 
 % What the end time (h) of the first drug's k_1 linear region is.
-t_k1_drug1_end_list = [0.5;   % 1 = AmpKan
-                       0.5;   % 2 = KanAmp(PBS)
-                       0.5;   % 3 = Kan(Amp)PBS % Must be same as KanAmp(PBS) (same data)
-                       0.5;   % 4 = AmpCip
-                       0.5;   % 5 = CipAmp(PBS) 
-                       0.5;   % 6 = Cip(Amp)PBS % Must be same as CipAmp(PBS) (same data)
-                       0.5;   % 7 = CipKan % Must be same as CipAmp(PBS) (same data)
-                       0.5;   % 8 = KanCip(PBS)
-                       0.5];  % 9 = Kan(Cip)PBS % Must be same as KanCip(PBS) (same data)
+t_k1_drug1_end_list = [0.5;   %  1 = AmpKan
+                       0.5;   %  2 = KanAmp(PBS)
+                       0.5;   %  3 = Kan(Amp)PBS % Must be same as KanAmp(PBS) (same data)
+                       0.5;   %  4 = AmpCip
+                       0.5;   %  5 = CipAmp(PBS) 
+                       0.5;   %  6 = Cip(Amp)PBS % Must be same as CipAmp(PBS) (same data)
+                       0.5;   %  7 = CipKan % Must be same as CipAmp(PBS) (same data)
+                       0.5;   %  8 = KanCip(PBS)
+                       0.5;   %  9 = Kan(Cip)PBS % Must be same as KanCip(PBS) (same data)
+                       0.5;   % 10 = AmpCip1000x
+                       0.5;   % 11 = CipAmp1000x
+                       0.5];  % 12 = CipKan1000x % Must be same as CipAmp1000x (same data)
 t_k1_drug1_end = t_k1_drug1_end_list(experiment_index);
 % Note: Timepoint selected for each experiment to qualitatively balance 3 
 % factors: (1) Achieving low RMSE values for each of the linear fits, 
@@ -86,15 +98,18 @@ t_k1_drug1_end = t_k1_drug1_end_list(experiment_index);
 
 
 % What the start time (h) of the first drug's k_2 linear region is
-t_k2_drug1_start_list = [2;   % 1 = AmpKan
-                         1;   % 2 = KanAmp(PBS)
-                         1;   % 3 = Kan(Amp)PBS % Must be same as KanAmp(PBS) (same data)
-                         2;   % 4 = AmpCip
-                         1;   % 5 = CipAmp(PBS) 
-                         1;   % 6 = Cip(Amp)PBS % Must be same as CipAmp(PBS) (same data)
-                         1;   % 7 = CipKan % Must be same as CipAmp(PBS) (same data)
-                         1;   % 8 = KanCip(PBS)
-                         1];  % 9 = Kan(Cip)PBS % Must be same as KanCip(PBS) (same data)
+t_k2_drug1_start_list = [2;   %  1 = AmpKan
+                         1;   %  2 = KanAmp(PBS)
+                         1;   %  3 = Kan(Amp)PBS % Must be same as KanAmp(PBS) (same data)
+                         2;   %  4 = AmpCip
+                         1;   %  5 = CipAmp(PBS) 
+                         1;   %  6 = Cip(Amp)PBS % Must be same as CipAmp(PBS) (same data)
+                         1;   %  7 = CipKan % Must be same as CipAmp(PBS) (same data)
+                         1;   %  8 = KanCip(PBS)
+                         1;   %  9 = Kan(Cip)PBS % Must be same as KanCip(PBS) (same data)
+                         2;   % 10 = AmpCip1000x
+                         1;   % 11 = CipAmp1000x
+                         1];  % 12 = CipKan1000x % Must be same as CipAmp1000x (same data)
 t_k2_drug1_start = t_k2_drug1_start_list(experiment_index);
 % Note: Timepoint selected for each experiment to qualitatively balance 3 
 % factors: (1) Achieving low RMSE values for each of the linear fits, 
@@ -103,15 +118,18 @@ t_k2_drug1_start = t_k2_drug1_start_list(experiment_index);
 
 
 % What the end time (h) of the second drug's k_1 linear region is.
-t_k1_drug2_end_list = [3;   % 1 = AmpKan
-                       inf; % 2 = KanAmp(PBS)
-                       inf; % 3 = Kan(Amp)PBS
-                       3;   % 4 = AmpCip
-                       inf; % 5 = CipAmp(PBS)
-                       inf; % 6 = Cip(Amp)PBS
-                       3;   % 7 = CipKan
-                       inf; % 8 = KanCip(PBS)
-                       inf]; % 9 = Kan(Cip)PBS
+t_k1_drug2_end_list = [3;   %  1 = AmpKan
+                       inf; %  2 = KanAmp(PBS)
+                       inf; %  3 = Kan(Amp)PBS
+                       3;   %  4 = AmpCip
+                       inf; %  5 = CipAmp(PBS)
+                       inf; %  6 = Cip(Amp)PBS
+                       3;   %  7 = CipKan
+                       inf; %  8 = KanCip(PBS)
+                       inf; %  9 = Kan(Cip)PBS
+                       3;   % 10 = AmpCip1000x
+                       inf; % 11 = CipAmp1000x
+                       4];  % 12 = CipKan1000x
 t_k1_drug2_end = t_k1_drug2_end_list(experiment_index);
 % NOTE: Values of "inf" are used when there is assumed to be only a k_2
 % killing phase for the second drug. That is to say, it is assumed that all
@@ -129,15 +147,18 @@ t_k1_drug2_end = t_k1_drug2_end_list(experiment_index);
 
 
 % What the start time (h) of the second drug's k_2 linear region is
-t_k2_drug2_start_list = [4;   % 1 = AmpKan
-                         2;   % 2 = KanAmp(PBS)
-                         2;   % 3 = Kan(Amp)PBS
-                         5;   % 4 = AmpCip
-                         2;   % 5 = CipAmp(PBS)
-                         2;   % 6 = Cip(Amp)PBS
-                         4;   % 7 = CipKan
-                         2;   % 8 = KanCip(PBS)
-                         2];  % 9 = Kan(Cip)PBS
+t_k2_drug2_start_list = [4;   %  1 = AmpKan
+                         2;   %  2 = KanAmp(PBS)
+                         2;   %  3 = Kan(Amp)PBS
+                         5;   %  4 = AmpCip
+                         2;   %  5 = CipAmp(PBS)
+                         2;   %  6 = Cip(Amp)PBS
+                         4;   %  7 = CipKan
+                         2;   %  8 = KanCip(PBS)
+                         2;   %  9 = Kan(Cip)PBS
+                         3;   % 10 = AmpCip1000x
+                         2;   % 11 = CipAmp1000x
+                         4];  % 12 = CipKan1000x
 t_k2_drug2_start = t_k2_drug2_start_list(experiment_index);
 % Note: Timepoint selected for each experiment to qualitatively balance 3 
 % factors: (1) Achieving low RMSE values for each of the linear fits, 
@@ -146,41 +167,50 @@ t_k2_drug2_start = t_k2_drug2_start_list(experiment_index);
 
 
 % Set of dilution factors used
-dil_fact_set_list = [100;   % 1 = AmpKan
-                     100;   % 2 = KanAmp(PBS)
-                     100;   % 3 = Kan(Amp)PBS
-                     100;   % 4 = AmpCip
-                     100;   % 5 = CipAmp(PBS)
-                     100;   % 6 = Cip(Amp)PBS
-                     100;   % 7 = CipKan
-                     100;   % 8 = KanCip(PBS)
-                     100];  % 9 = Kan(Cip)PBS
+dil_fact_set_list = [100;   %  1 = AmpKan
+                     100;   %  2 = KanAmp(PBS)
+                     100;   %  3 = Kan(Amp)PBS
+                     100;   %  4 = AmpCip
+                     100;   %  5 = CipAmp(PBS)
+                     100;   %  6 = Cip(Amp)PBS
+                     100;   %  7 = CipKan
+                     100;   %  8 = KanCip(PBS)
+                     100;   %  9 = Kan(Cip)PBS
+                     1000;  % 10 = AmpCip1000x
+                     1000;  % 11 = CipAmp1000x
+                     1000]; % 12 = CipKan1000x
 dil_fact_set = dil_fact_set_list(experiment_index,:);
 
 
 % First Culture Type
-first_cult_type_list = ["batch";   % 1 = AmpKan
-                        "batch";   % 2 = KanAmp(PBS)
-                        "batch";   % 3 = Kan(Amp)PBS
-                        "batch";   % 4 = AmpCip
-                        "batch";   % 5 = CipAmp(PBS)
-                        "batch";   % 6 = Cip(Amp)PBS
-                        "batch";   % 7 = CipKan
-                        "batch";   % 8 = KanCip(PBS)
-                        "batch"];  % 9 = Kan(Cip)PBS
+first_cult_type_list = ["batch";   %  1 = AmpKan
+                        "batch";   %  2 = KanAmp(PBS)
+                        "batch";   %  3 = Kan(Amp)PBS
+                        "batch";   %  4 = AmpCip
+                        "batch";   %  5 = CipAmp(PBS)
+                        "batch";   %  6 = Cip(Amp)PBS
+                        "batch";   %  7 = CipKan
+                        "batch";   %  8 = KanCip(PBS)
+                        "batch";   %  9 = Kan(Cip)PBS
+                        "batch";   % 10 = AmpCip1000x
+                        "batch";   % 11 = CipAmp1000x
+                        "batch"];  % 12 = CipKan1000x
 first_cult_type = first_cult_type_list(experiment_index);
 
 
 % The genotype
-genotype_list = ["WT";   % 1 = AmpKan
-                 "WT";   % 2 = KanAmp(PBS)
-                 "WT";   % 3 = Kan(Amp)PBS
-                 "WT";   % 4 = AmpCip
-                 "WT";   % 5 = CipAmp(PBS)
-                 "WT";   % 6 = Cip(Amp)PBS
-                 "WT";   % 7 = CipKan
-                 "WT";   % 8 = KanCip(PBS)
-                 "WT"];  % 9 = Kan(Cip)PBS
+genotype_list = ["WT";   %  1 = AmpKan
+                 "WT";   %  2 = KanAmp(PBS)
+                 "WT";   %  3 = Kan(Amp)PBS
+                 "WT";   %  4 = AmpCip
+                 "WT";   %  5 = CipAmp(PBS)
+                 "WT";   %  6 = Cip(Amp)PBS
+                 "WT";   %  7 = CipKan
+                 "WT";   %  8 = KanCip(PBS)
+                 "WT";   %  9 = Kan(Cip)PBS
+                 "WT";   % 10 = AmpCip1000x
+                 "WT";   % 11 = CipAmp1000x
+                 "WT"];  % 12 = CipKan1000x
 genotype = genotype_list(experiment_index);
 
 
